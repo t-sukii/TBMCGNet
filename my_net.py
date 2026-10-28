@@ -4,7 +4,6 @@ import torch.nn.functional as F
 from torch.nn import init
 from thop import profile
 from ptflops import get_model_complexity_info
-import time
 
 from _blocks import UnetBasicBlock, DualResBlock, ConvBlock, DWConv, DualDWResBlock
 
@@ -468,9 +467,9 @@ class conv_out_layer(nn.Module):
         return out
 
 
-class net_7(nn.Module):  # This code is MS-res conv + trans, with Channel attention
+class net(nn.Module): 
     def __init__(self, img_ch=3, output_ch=1, embed_dim=32):
-        super(net_7, self).__init__()
+        super(net, self).__init__()
 
         self.Maxpool = nn.MaxPool2d(kernel_size=2, stride=2)
 
@@ -566,7 +565,6 @@ class net_7(nn.Module):  # This code is MS-res conv + trans, with Channel attent
 
     def forward(self, x):
         # encoding path
-        start_time = time.time()
         x1_1 = self.trans1(x)
         x1_2 = self.Conv1(x)  # 1,64,256,256
         x1 = torch.cat([x1_1, x1_2], dim=1)
@@ -642,9 +640,6 @@ class net_7(nn.Module):  # This code is MS-res conv + trans, with Channel attent
         d2 = self.up_fuse2(d2)
 
         d1 = self.Conv_1x1(d2)
-        end_time = time.time()
-        inference_time = end_time - start_time
-        print(inference_time)
 
         return d1
 
