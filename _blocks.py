@@ -5,9 +5,6 @@ import torch.nn.functional as F
 from einops import rearrange
 
 
-# from networks.Gt_u_net.GT_UNet import MHSA
-
-
 class ConvBnRelu(nn.Module):
     def __init__(self, in_planes, out_planes, ksize, stride, pad, dilation=1, groups=1, has_bn=True,
                  has_relu=True, inplace=True, has_bias=False):
